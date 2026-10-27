@@ -31,18 +31,16 @@ String &operator=(String s) {
 }
 
 // move assigment operator
-/*
 String &operator=(String &&s) {
 	delete[] buf;
 	buf = s.buf;
 	s.buf = nullptr;
 	return *this;
 }
-*/
 
 char &String::operator[](int index) {
 	int length = strlen(buf);
-	if (index < 0 || index >= length) {
+	if (!in_bounds(i)) {
 		cout << "ERROR: Index Out Of Bounds" << endl;
 		return buf[0];
 	}
@@ -51,8 +49,7 @@ char &String::operator[](int index) {
 }
 
 const char &String::operator[](int index) const {
-	int length = strlen(buf);
-	if (index < 0 || index >= length) {
+	if (!in_bounds(i)) {
 		cout << "ERROR: Index Out Of Bounds" << endl;
 		return buf[0];
 	}
@@ -70,9 +67,27 @@ String String::reverse() const {
 	return reversed;
 }
 
+int String::indexOf(char c) const {
+	const char * result = strchr(buf, c);
+	if (result == nullptr) {
+		return -1;
+	}
+
+	return static_cast<int>(result - buf);
+}
+
+int String::indexOf(String s) const {
+	const char * result = strstr(buf, s.buf);
+	if (result == nullptr) {
+		return -1;
+	}
+
+	return static_cast<int>(result - buf);
+}
+
 // Relational Operators ////////////////////////////////////////////////////////
 bool String::operator==(const String &s) const {
-return strcmp(buf, s.buf) == 0;
+	return strcmp(buf, s.buf) == 0;
 }
 
 bool String::operator!=(const String &s) const {
@@ -97,19 +112,45 @@ bool String::operator>=(const String &s) const {
 
 
 // Relational Operator End //////////////////////////////////////////////////////
+String String::operator+(String s) const {
+	String result;
+	size_t length = strlen(buf) + strlen(s.buf) + 1;
+	
+	result.buf {new char[length]};
+	strcpy(result.buf, buf);
+	strcat(result.buf, s.buf);
+
+	return result;
+
+}
+
+String &String::operator+=(String s) {
+	size_t length = strlen(buf) + strlen(s.buf) + 1;
+	char * expanded_buf {new char[length]};
+
+	strcpy(expanded_buf, buf);
+	strcat(expanded_buf, buf);
+
+	delete[] buf;
+	buf = expanded_buf;
+	return *this;
+}
+
 
 void String::print(ostream &out) const {
 	out << buf;
 }
 
 void String::read(istream &in) {
-	//char temp[1024];
-	//in >> temp;
+	char input[1024];
+	in >> input;
 
-//	delete[] buf;
-	//buf = strdup(temp);	
+	*this = String(input);
 }
 
+String::~String() {
+	delete[] buf;
+}
 
 // Helpers /////////////////////////////////////////////////////////////////////
 int String::strlen(const char *s) {
@@ -234,3 +275,13 @@ const char *String::strstr(const char *haystack, const char *needle) {
 }
 
 ////////////////////////////////////////////////////////////////////////////
+
+ostream &operator<<(ostream& out, String s) {
+	s.print(out);
+	return out;
+}
+
+istream &operator>>(istream& in, String &s) {
+	s.read(in)
+	return in;
+}
