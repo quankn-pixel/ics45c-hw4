@@ -91,9 +91,17 @@ TEST(StringFunction, strncmp) {
     EXPECT_EQ(String::strncmp("Elephant", "Squid", 0), 0);
 	EXPECT_EQ(String::strncmp("123 hello", "123 world", 5), -15);
 	EXPECT_EQ(String::strncmp("R2D2", "R2xx", 2), 0);
+	EXPECT_EQ(String::strncmp("abc", "abcXYZ", 3), 0);
 
 	EXPECT_EQ(String::strncmp("aA", "aZamala", 30), -25);
 	EXPECT_EQ(String::strncmp("", "", 5), 0);
+	EXPECT_EQ(String::strncmp("a", "A", 4), 'a' - 'A');
+	EXPECT_EQ(String::strncmp("A", "a", 1), 'A' - 'a');
+
+	EXPECT_EQ(String::strncmp("lemonA", "lemonB", 8), -1);
+	EXPECT_EQ(String::strncmp("A ", "A   Z", 30000), -32);
+	EXPECT_EQ(String::strncmp("hello", "hello", 10), 0);
+	EXPECT_EQ(String::strncmp("cat", "cat", 3), 0);
 }
 
 TEST(StringFunction, reverse_cpy) {
@@ -124,7 +132,7 @@ TEST(StringFunction, strstr) {
     EXPECT_EQ(String::strstr(empty_string, ""), empty_string);
 
 	char uhh[] {"uhh"};
-	EXPECT_EQ(String::strstr(uhh, "uh"), &uhh[0]);
+	EXPECT_EQ(String::strstr(uhh, "uhh"), &uhh[0]);
 
 	char hello[] {"Hello World!!!"};
 	EXPECT_EQ(String::strstr(hello, "World!"), &hello[6]);
@@ -132,6 +140,11 @@ TEST(StringFunction, strstr) {
 	char randomstr[] {" aAa a a a a a ab hmmm aaa"};
 	EXPECT_EQ(String::strstr(randomstr, " aa"), &randomstr[22]);
 
-	char scaryString[] {"aabaaban"};
-	EXPECT_EQ(String::strstr(scaryString, "aban"), &scaryString[4]);
+	char scaryString[] {"aababan"};
+	EXPECT_EQ(String::strstr(scaryString, "aban"), &scaryString[3]);
+
+	char testString[] {"hello"};
+	EXPECT_EQ(String::strstr(testString, "hello world"), nullptr);
+	EXPECT_EQ(String::strstr(testString, "xyz"), nullptr);
+	EXPECT_EQ(String::strstr(testString, ""), testString);
 }
