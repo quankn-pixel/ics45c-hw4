@@ -31,6 +31,10 @@ void String::swap(String &s) {
 
 // copy assignment operator
 String &String::operator=(const String &s) {
+	if(this == &s) {
+		return *this;
+	}
+
 	delete[] buf;
 	buf = strdup(s.buf);
 	return *this;
@@ -38,6 +42,10 @@ String &String::operator=(const String &s) {
 
 // move assigment operator
 String &String::operator=(String &&s) {
+	if(this == &s) {
+		return *this;
+	}
+
 	delete[] buf;
 	buf = s.buf;
 	s.buf = nullptr;
@@ -126,7 +134,7 @@ String &String::operator+=(const String &s) {
 	char * temp_buf {new char[length]};
 
 	strcpy(temp_buf, buf);
-	strcat(temp_buf, buf);
+	strcat(temp_buf, s.buf);
 
 	delete[] buf;
 	buf = temp_buf;
