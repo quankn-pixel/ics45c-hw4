@@ -7,6 +7,14 @@ using namespace std;
 // constructor
 String::String(const char *s): buf(strdup(s)) {}
 
+// concatenation constructor
+String::String(const char *s1, const char *s2) {
+	size_t length = strlen(s1) + strlen(s2) + 1;
+	buf = new char[length];
+	strcpy(buf, s1);
+	strcat(buf, s2);
+}
+
 // copy constructor
 String::String(const String &s): buf(strdup(s.buf)) {}
 
@@ -110,27 +118,18 @@ bool String::operator>=(const String &s) const {
 
 // Relational Operator End //////////////////////////////////////////////////////
 String String::operator+(const String &s) const {
-	String result;
-	size_t length = strlen(buf) + strlen(s.buf) + 1;
-	
-	delete[] result.buf;
-	result.buf = new char[length];
-	strcpy(result.buf, buf);
-	strcat(result.buf, s.buf);
-
-	return result;
-
+	return String(buf, s.buf);
 }
 
 String &String::operator+=(const String &s) {
 	size_t length = strlen(buf) + strlen(s.buf) + 1;
-	char * expanded_buf {new char[length]};
+	char * temp_buf {new char[length]};
 
-	strcpy(expanded_buf, buf);
-	strcat(expanded_buf, buf);
+	strcpy(temp_buf, buf);
+	strcat(temp_buf, buf);
 
 	delete[] buf;
-	buf = expanded_buf;
+	buf = temp_buf;
 	return *this;
 }
 

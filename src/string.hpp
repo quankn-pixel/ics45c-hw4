@@ -11,6 +11,8 @@ public:
     // construct this string as a copy of string s
     String(const String &s);
 
+	String(const char *s1, const char *s2);
+
     // construct this string by moving from string s
     String(String &&s);
 
