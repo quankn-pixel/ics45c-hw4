@@ -11,12 +11,10 @@ String::String(const char *s): buf(strdup(s)) {}
 String::String(const String &s): buf(strdup(s.buf)) {}
 
 // move constructor ////
-/*
 String::String(String &&s) {
 	buf = s.buf;
 	s.buf = nullptr;
 }
-*/
 
 void String::swap(String &s) {
 	using std::swap;
@@ -75,7 +73,7 @@ int String::indexOf(char c) const {
 	return static_cast<int>(result - buf);
 }
 
-int String::indexOf(String s) const {
+int String::indexOf(const String &s) const {
 	const char * result = strstr(buf, s.buf);
 	if (result == nullptr) {
 		return -1;
@@ -85,33 +83,33 @@ int String::indexOf(String s) const {
 }
 
 // Relational Operators ////////////////////////////////////////////////////////
-bool String::operator==(const String s) const {
+bool String::operator==(const String &s) const {
 	return strcmp(buf, s.buf) == 0;
 }
 
-bool String::operator!=(const String s) const {
+bool String::operator!=(const String &s) const {
 	return strcmp(buf, s.buf) != 0;
 }
 
-bool String::operator>(const String s) const {
+bool String::operator>(const String &s) const {
 	return strcmp(buf, s.buf) > 0;
 }
 
-bool String::operator<(const String s) const {
+bool String::operator<(const String &s) const {
 	return strcmp(buf, s.buf) < 0;
 }
 
-bool String::operator<=(const String s) const {
+bool String::operator<=(const String &s) const {
 	return strcmp(buf, s.buf) <= 0;
 }
 
-bool String::operator>=(const String s) const {
+bool String::operator>=(const String &s) const {
 	return strcmp(buf, s.buf) >= 0;
 }
 
 
 // Relational Operator End //////////////////////////////////////////////////////
-String String::operator+(String s) const {
+String String::operator+(const String &s) const {
 	String result;
 	size_t length = strlen(buf) + strlen(s.buf) + 1;
 	
@@ -124,7 +122,7 @@ String String::operator+(String s) const {
 
 }
 
-String &String::operator+=(String s) {
+String &String::operator+=(const String &s) {
 	size_t length = strlen(buf) + strlen(s.buf) + 1;
 	char * expanded_buf {new char[length]};
 
@@ -276,7 +274,7 @@ const char *String::strstr(const char *haystack, const char *needle) {
 
 ////////////////////////////////////////////////////////////////////////////
 
-ostream &operator<<(ostream& out, String s) {
+ostream &operator<<(ostream& out, const String &s) {
 	s.print(out);
 	return out;
 }
