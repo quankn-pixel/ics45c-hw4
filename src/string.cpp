@@ -19,19 +19,19 @@ String::String(String &&s) {
 */
 
 void String::swap(String &s) {
-	// no std:: needed bc the func signatures are different
+	using std::swap;
 	swap(buf, s.buf);
 }
 
 // copy assignment operator
-String &operator=(String s) {
+String &String::operator=(const String &s) {
 	delete[] buf;
-	buf = strdup(s);
+	buf = strdup(s.buf);
 	return *this;
 }
 
 // move assigment operator
-String &operator=(String &&s) {
+String &String::operator=(String &&s) {
 	delete[] buf;
 	buf = s.buf;
 	s.buf = nullptr;
@@ -39,8 +39,7 @@ String &operator=(String &&s) {
 }
 
 char &String::operator[](int index) {
-	int length = strlen(buf);
-	if (!in_bounds(i)) {
+	if (!in_bounds(index)) {
 		cout << "ERROR: Index Out Of Bounds" << endl;
 		return buf[0];
 	}
@@ -49,7 +48,7 @@ char &String::operator[](int index) {
 }
 
 const char &String::operator[](int index) const {
-	if (!in_bounds(i)) {
+	if (!in_bounds(index)) {
 		cout << "ERROR: Index Out Of Bounds" << endl;
 		return buf[0];
 	}
@@ -86,27 +85,27 @@ int String::indexOf(String s) const {
 }
 
 // Relational Operators ////////////////////////////////////////////////////////
-bool String::operator==(const String &s) const {
+bool String::operator==(const String s) const {
 	return strcmp(buf, s.buf) == 0;
 }
 
-bool String::operator!=(const String &s) const {
+bool String::operator!=(const String s) const {
 	return strcmp(buf, s.buf) != 0;
 }
 
-bool String::operator>(const String &s) const {
+bool String::operator>(const String s) const {
 	return strcmp(buf, s.buf) > 0;
 }
 
-bool String::operator<(const String &s) const {
+bool String::operator<(const String s) const {
 	return strcmp(buf, s.buf) < 0;
 }
 
-bool String::operator<=(const String &s) const {
+bool String::operator<=(const String s) const {
 	return strcmp(buf, s.buf) <= 0;
 }
 
-bool String::operator>=(const String &s) const {
+bool String::operator>=(const String s) const {
 	return strcmp(buf, s.buf) >= 0;
 }
 
@@ -116,7 +115,8 @@ String String::operator+(String s) const {
 	String result;
 	size_t length = strlen(buf) + strlen(s.buf) + 1;
 	
-	result.buf {new char[length]};
+	delete[] result.buf;
+	result.buf = new char[length];
 	strcpy(result.buf, buf);
 	strcat(result.buf, s.buf);
 
@@ -160,7 +160,7 @@ int String::strlen(const char *s) {
 	return i;
 }
 
-char *strdup(const char *src) {
+char *String::strdup(const char *src) {
 	size_t length = strlen(src) + 1;
 	char * new_string {new char[length]};
 	strcpy(new_string, src);
@@ -282,6 +282,6 @@ ostream &operator<<(ostream& out, String s) {
 }
 
 istream &operator>>(istream& in, String &s) {
-	s.read(in)
+	s.read(in);
 	return in;
 }
