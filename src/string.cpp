@@ -18,7 +18,7 @@ String::String(String &&s) {
 }
 */
 
-void swap(String &s) {
+void String::swap(String &s) {
 	// no std:: needed bc the func signatures are different
 	swap(buf, s.buf);
 }
@@ -39,6 +39,36 @@ String &operator=(String &&s) {
 	return *this;
 }
 */
+
+char &String::operator[](int index) {
+	int length = strlen(buf);
+	if (index < 0 || index >= length) {
+		cout << "ERROR: Index Out Of Bounds" << endl;
+		return buf[0];
+	}
+
+	return buf[index];	
+}
+
+const char &String::operator[](int index) const {
+	int length = strlen(buf);
+	if (index < 0 || index >= length) {
+		cout << "ERROR: Index Out Of Bounds" << endl;
+		return buf[0];
+	}
+
+	return buf[index];	
+}
+
+int String::size() const {
+	return strlen(buf);
+}
+
+String String::reverse() const {
+	String reversed {*this};
+	reverse_cpy(reversed.buf, buf);
+	return reversed;
+}
 
 // Relational Operators ////////////////////////////////////////////////////////
 bool String::operator==(const String &s) const {
