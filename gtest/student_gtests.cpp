@@ -12,7 +12,7 @@ TEST(StringFunction, strdup) {
 	for (int i = 0; i < 1999; ++i) {
 		big_buf[i] = 'e';
 	}
-	String big_string {big_buf};
+	char * big_string {String::strdup(big_buf)};
 	EXPECT_EQ(big_string[1998], 'e');
 
 	char small_buf[] {"Hello"};
@@ -20,6 +20,7 @@ TEST(StringFunction, strdup) {
 	small_buf[0] = 'Y';
 	
 	EXPECT_STREQ(other_buf, "Hello");
+	delete[] big_string;
 	delete[] other_buf;
 }
 
